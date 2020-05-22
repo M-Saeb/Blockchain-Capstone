@@ -19,7 +19,7 @@ contract Ownable {
     }
 
     //  2) create an internal constructor that sets the _owner var to the creater of the contract
-    constructor(){
+    constructor() internal {
         _owner = msg.sender;
         emit ownerShip(_owner);
     }
@@ -64,7 +64,7 @@ contract Pausable is Ownable {
     }
 
 //  3) create an internal constructor that sets the _paused variable to false
-    constructor(){
+    constructor() internal {
         _paused = false;
     }
 
