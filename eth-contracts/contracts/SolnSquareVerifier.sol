@@ -1,6 +1,5 @@
 pragma solidity >=0.4.21 <0.6.0;
 
-import "./verifier.sol";
 import "./ERC721Mintable.sol";
 
 // docker run -v /Users/<your_user_name>/Documents/Blockchain-Capston/zokrates/code:/home/zokrates/code -ti zokrates/zokrates:0.4.6 /bin/bash
@@ -19,10 +18,10 @@ contract SolnSquareVerifier is CustomERC721Token{
   }
 
 // TODO define an array of the above struct
-  Sol[] solutions;
+  address[] solutions;
 
 // TODO define a mapping to store unique solutions submitted
-  mapping(uint256 => Sol) mapSolutions;
+  mapping(uint256 => address) mapSolutions;
 
 // TODO Create an event to emit when a solution is added
   event solutionAdded(uint256 index, address holder);
@@ -30,9 +29,9 @@ contract SolnSquareVerifier is CustomERC721Token{
   event TokenMint(uint256 tokenId, address to);
 
 // TODO Create a function to add the solutions to the array and emit the event
-  function addSolutoin(uint256 index, address holder) public {
-    Sol newSol = Sol(index, holder);
-    mapSolutions.append(newSol);
+  function addSolution(uint256 index, address holder) public {
+    mapSolutions[index] = holder;
+    solutions[index] = holder;
     emit solutionAdded(index, holder);
   }
 
@@ -57,11 +56,13 @@ contract SolnSquareVerifier is CustomERC721Token{
         public
     {
 
-        addSolution(to, a, a_o, b, b_o, c, c_o, h, k, input);
+        // addSolution(to, a, a_o, b, b_o, c, c_o, h, k, input);
 
-        super.mint(to, tokenId);
+      string memory tokenURI = _tokenURIs[tokenId];
 
-        emit TokenMint(tokenId, to);
+      mint(to, tokenId, tokenURI);
+
+      emit TokenMint(tokenId, to);
     }
 }
 

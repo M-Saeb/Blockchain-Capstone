@@ -160,7 +160,7 @@ contract ERC721 is Pausable, ERC165 {
     function balanceOf(address owner) public view returns (uint256) {
         // TODO return the token balance of given address
         // TIP: remember the functions to use for Counters. you can refresh yourself with the link above
-        return _ownedTokensCount[owner];
+        return _ownedTokensCount[owner].current();
     }
 
     function ownerOf(uint256 tokenId) public view returns (address) {
@@ -494,7 +494,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
 
     // TODO: create private mapping of tokenId's to token uri's called '_tokenURIs'
-    mapping (uint256 => Token) _tokenURIs;
+    mapping (uint256 => string) _tokenURIs;
 
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
     /*
@@ -525,11 +525,11 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
 
     // TODO: Create an internal function to set the tokenURI of a specified tokenId
-    function setTokenURI(tokenId) internal {
-        require(_exist(tokenId), "The token does exist");
+    function setTokenURI(uint256 tokenId) internal {
+        require(_exists(tokenId), "The token does exist");
 
     // It should be the _baseTokenURI + the tokenId in string form
-        _tokenURIs[tokenId] = strConcat(_baseTokenURI, tokenId);
+        _tokenURIs[tokenId] = usingOraclize.strConcat(_baseTokenURI, uint2str(tokenId));
 
     // TIP #1: use strConcat() from the imported oraclizeAPI lib to set the complete token URI
     // TIP #2: you can also use uint2str() to convert a uint to a string
@@ -548,6 +548,8 @@ contract CustomERC721Token is ERC721Metadata{
     string private _symbol;
     string private _baseTokenURI;
 
+    bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
+
     constructor (string memory name, string memory symbol) public {
         // TODO: set instance var values
         _name = name;
@@ -560,7 +562,8 @@ contract CustomERC721Token is ERC721Metadata{
 //      -takes in a 'to' address, tokenId, and tokenURI as parameters
 //      -returns a true boolean upon completion of the function
 //      -calls the superclass mint and setTokenURI functions
-    function mint(address to, tokenIdn, tokenURI) public onlyOwner returns(bool){
+    function mint(address to, uint256 tokenId, string memory tokenURI)
+    public onlyOwner returns(bool){
         _mint(to, tokenId);
         setTokenURI(tokenId);
     }
