@@ -213,7 +213,7 @@ contract ERC721 is Pausable, ERC165 {
     }
 
     function transferFrom(address from, address to, uint256 tokenId) public {
-        require(_isApprovedOrOwner(msg.sender, tokenId));
+        require(_isApprovedOrOwner(msg.sender, tokenId), "this account isn't approved or is the owner");
 
         _transferFrom(from, to, tokenId);
     }
@@ -254,7 +254,7 @@ contract ERC721 is Pausable, ERC165 {
     function _mint(address to, uint256 tokenId) internal {
 
         // TODO revert if given tokenId already exists or given address is invalid
-        require(_exists(tokenId), "the address given does not exist");
+        require(!_exists(tokenId), "the address given does not exist");
 
         // TODO mint tokenId to given address & increase token count of owner
         _tokenOwner[tokenId] = to;
@@ -280,6 +280,9 @@ contract ERC721 is Pausable, ERC165 {
         // TODO: update token counts & transfer ownership of the token ID
         _ownedTokensCount[from].decrement();
         _ownedTokensCount[to].increment();
+
+        //ADDED BY MYSELF !! ============================
+        _tokenOwner[tokenId] = to;
 
         // TODO: emit correct event
         emit Transfer(from, to, tokenId);
@@ -540,7 +543,8 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract.
 //  You can name this contract as you please
-contract CustomERC721Token is ERC721Metadata{
+contract CustomERC721Token is ERC721Metadata("myToken", "mtk",
+"https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/"){
 
 //  1) Pass in appropriate values for the inherited ERC721Metadata contract
 //      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
@@ -550,13 +554,13 @@ contract CustomERC721Token is ERC721Metadata{
 
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
 
-    constructor (string memory name, string memory symbol) public {
-        // TODO: set instance var values
-        _name = name;
-        _symbol = symbol;
-        _baseTokenURI = "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/";
-        _registerInterface(_INTERFACE_ID_ERC721_METADATA);
-    }
+    // constructor (string memory name, string memory symbol) public {
+    //     // TODO: set instance var values
+    //     _name = name;
+    //     _symbol = symbol;
+    //     _baseTokenURI = "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/";
+    //     _registerInterface(_INTERFACE_ID_ERC721_METADATA);
+    // }
 //  2) create a public mint() that does the following:
 //      -can only be executed by the contract owner
 //      -takes in a 'to' address, tokenId, and tokenURI as parameters
@@ -564,8 +568,9 @@ contract CustomERC721Token is ERC721Metadata{
 //      -calls the superclass mint and setTokenURI functions
     function mint(address to, uint256 tokenId, string memory tokenURI)
     public onlyOwner returns(bool){
-        _mint(to, tokenId);
+        super._mint(to, tokenId);
         setTokenURI(tokenId);
+        return true;
     }
 }
 

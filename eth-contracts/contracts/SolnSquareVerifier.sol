@@ -11,6 +11,10 @@ contract SolnSquareVerifier is CustomERC721Token{
 
   Verifier verifier;
 
+  constructor(address verifierContract) public {
+    verifier = Verifier(verifierContract);
+  }
+
 // TODO define a solutions struct that can hold an index & an address
   struct Sol{
     uint256 index;
@@ -75,27 +79,3 @@ contract Verifier {
         uint[2] memory input
     ) public returns (bool r);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
