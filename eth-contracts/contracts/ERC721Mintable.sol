@@ -554,13 +554,6 @@ contract CustomERC721Token is ERC721Metadata("myToken", "mtk",
 
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
 
-    // constructor (string memory name, string memory symbol) public {
-    //     // TODO: set instance var values
-    //     _name = name;
-    //     _symbol = symbol;
-    //     _baseTokenURI = "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/";
-    //     _registerInterface(_INTERFACE_ID_ERC721_METADATA);
-    // }
 //  2) create a public mint() that does the following:
 //      -can only be executed by the contract owner
 //      -takes in a 'to' address, tokenId, and tokenURI as parameters

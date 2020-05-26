@@ -17,15 +17,15 @@ contract SolnSquareVerifier is CustomERC721Token{
 
 // TODO define a solutions struct that can hold an index & an address
   struct Sol{
-    uint256 index;
-    address holder;
+    uint index;
+    address owner;
   }
 
 // TODO define an array of the above struct
-  address[] solutions;
+  Sol[] sols;
 
 // TODO define a mapping to store unique solutions submitted
-  mapping(uint256 => address) mapSolutions;
+  mapping(bytes32 => bool) solutionsExist;
 
 // TODO Create an event to emit when a solution is added
   event solutionAdded(uint256 index, address holder);
@@ -33,10 +33,33 @@ contract SolnSquareVerifier is CustomERC721Token{
   event TokenMint(uint256 tokenId, address to);
 
 // TODO Create a function to add the solutions to the array and emit the event
-  function addSolution(uint256 index, address holder) public {
-    mapSolutions[index] = holder;
-    solutions[index] = holder;
-    emit solutionAdded(index, holder);
+  function addSolution
+  (
+    address to,
+    uint256 tokenId,
+    uint[2] memory a,
+    uint[2][2] memory b,
+    uint[2] memory c,
+    uint[2] memory input
+  )
+    public
+    returns(bool)
+  {
+
+    bytes32 key = keccak256(abi.encodePacked(a,b,c,input));
+
+    if(!solutionsExist[key]){
+      bool verification = verifier.verifyTx(a, b, c,input);
+
+        if(verification){
+          solutionsExist[key] = true;
+          Sol memory newSol = Sol(tokenId, to);
+          sols.push(newSol);
+          emit solutionAdded(tokenId, to);
+          return true;
+        }
+    }
+    return false;
   }
 
 
@@ -48,26 +71,26 @@ contract SolnSquareVerifier is CustomERC721Token{
         address to,
         uint256 tokenId,
         uint[2] memory a,
-        uint[2] memory a_o,
         uint[2][2] memory b,
-        uint[2] memory b_o,
         uint[2] memory c,
-        uint[2] memory c_o,
-        uint[2] memory h,
-        uint[2] memory k,
         uint[2] memory input
     )
         public
+        returns (bool)
     {
-
+      bool solState = addSolution(to, tokenId, a, b, c,input);
         // addSolution(to, a, a_o, b, b_o, c, c_o, h, k, input);
 
-      string memory tokenURI = _tokenURIs[tokenId];
+      if(solState){
+        string memory tokenURI = _tokenURIs[tokenId];
+        mint(to, tokenId, tokenURI);
+        emit TokenMint(tokenId, to);
+        return true;
+      }
 
-      mint(to, tokenId, tokenURI);
-
-      emit TokenMint(tokenId, to);
+      return false;
     }
+
 }
 
 
