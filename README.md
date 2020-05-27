@@ -4,9 +4,13 @@ The capstone will build upon the knowledge you have gained in the course in orde
 
 
 # Student Notes
-This is a full ERC721 contract that  was tested using the testing js files.
-The Zokrates code, proof and witness has been provided in the Zokrates folder
-the contract address is `0x3B4A975CF4b169F8766adcF3F7c4EFaA7843EBC6`
+- testing can be done using the testing js files:
+  - TestERC721Mintable.js
+  - TestSquareVerifier.js
+  - TestSolnSquareVerifier.js
+- the contract address is `0x3B4A975CF4b169F8766adcF3F7c4EFaA7843EBC6`
+- the Store front URI is `https://rinkeby.opensea.io/category/unidentified-contract-v403`
+- The Zokrates code, proof and witness has been provided in the Zokrates folder
 and the Abi is:
 
 ```
