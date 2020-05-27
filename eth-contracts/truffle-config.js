@@ -18,13 +18,10 @@
  *
  */
 
+import INFO from './INFO'
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraKey = "c0e0d15592944f0a96195bacaff2f2d9";
-
-const fs = require('fs');
-const mnemonic = "hen spoon sort report rebuild enjoy tornado shoot detail win purchase amused";
-// const Mmnemonic = "hen spoon sort report rebuild enjoy tornado shoot detail win purchase amused";
-//truffle mnemonic = "oval puzzle dial rich utility fresh sweet news outside intact deliver trophy"
+const infuraKey = INFO.infuraKey;
+const mnemonic = INFO.mnemonic
 
 module.exports = {
   /**

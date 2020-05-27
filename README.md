@@ -4,11 +4,20 @@ The capstone will build upon the knowledge you have gained in the course in orde
 
 
 # Student Notes
-- testing can be done using the testing js files:
-  - TestERC721Mintable.js
-  - TestSquareVerifier.js
-  - TestSolnSquareVerifier.js
-- the contract address is `0x3B4A975CF4b169F8766adcF3F7c4EFaA7843EBC6`
+- you'll need to create `INFO.js` file in the "eth-contracts" folder if you want to deploy the contract to a network.
+  ex:
+    ```
+    export default {
+      infuraKey: "<your-infuraKey>",
+      mnemonic: "<your-metamask-mnemonic>",
+    }
+    ```
+- testing can be done by runing:
+  - `truffle test` or
+  - `truffle develop` than `test`
+- the Verifier contract address is `0xF0982425e3783b92666B4A0E7f3602eE1B9dc1e8`
+- the SquareVerifier contract address is `0x3B4A975CF4b169F8766adcF3F7c4EFaA7843EBC6`
+
 - the Store front URI is `https://rinkeby.opensea.io/category/unidentified-contract-v403`
 - The Zokrates code, proof and witness has been provided in the Zokrates folder
 and the Abi is:
